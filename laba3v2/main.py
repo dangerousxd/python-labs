@@ -5,7 +5,6 @@
 
 """Целые четные числа, начинающиеся с 9. Для каждого числа повторяющиеся цифры вывести прописью."""
 
-
 def number_to_words(digit):
     words_dict = {
         '0': 'ноль',
@@ -24,32 +23,31 @@ def number_to_words(digit):
 def get_digit_counts(number):
     digit_count = {}
     for digit in str(number):
-        digit_count[digit] = digit_count.get(digit, 0) + 1
+        if digit.isdigit():
+            digit_count[digit] = digit_count.get(digit, 0) + 1
     return digit_count
 
 def process_number(num):
-
     digit_count = get_digit_counts(num)
     words_representation = []
 
     for digit in str(num):
-        count = digit_count[digit]
-        if count > 1:
+        if digit == '-':
+            words_representation.append('-')
+        elif digit_count[digit] > 1:
             words_representation.append(number_to_words(digit))
         else:
             words_representation.append(digit)
-            digit_count[digit] = 0
 
     return ''.join(words_representation)
 
 def process_numbers(input_data):
-
     results = []
     numbers = input_data.split()
     for num_str in numbers:
-        if num_str.isdigit():
+        if num_str.lstrip('-').isdigit():
             num = int(num_str)
-            if num % 2 == 0 and str(num).startswith('9'):
+            if num % 2 == 0 and str(abs(num)).startswith('9'):
                 words_representation = process_number(num)
                 results.append(f"{num}: {words_representation}")
     return results

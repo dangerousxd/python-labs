@@ -3,11 +3,10 @@
   Для упрощения под выводом числа прописью подразумевается последовательный вывод всех цифр числа."""
 
 """Целые четные числа, начинающиеся с 9. Для каждого числа повторяющиеся цифры вывести прописью."""
-
 import re
 
 def number_to_words(digit):
-
+    """Функция преобразует цифру в слово."""
     words_dict = {
         '0': 'ноль',
         '1': 'один',
@@ -23,29 +22,36 @@ def number_to_words(digit):
     return words_dict.get(digit, '')
 
 def get_digit_counts(number):
+    """Функция подсчитывает количество каждой цифры в числе."""
     digit_count = {}
     for digit in str(number):
-        digit_count[digit] = digit_count.get(digit, 0) + 1
+        if digit.isdigit():  # Игнорируем знак "-"
+            digit_count[digit] = digit_count.get(digit, 0) + 1
     return digit_count
 
 def process_numbers(input_data):
+    """Обрабатывает строку с числами и возвращает результаты."""
     results = []
+
+    # Регулярное выражение для целых чисел, начинающихся с 9 (с учетом отрицательных чисел).
+    pattern = re.compile(r'-?9\d*[02468]')
+
     numbers = input_data.split()
 
     for num_str in numbers:
-        if num_str.isdigit() and len(num_str) > 1:
-            if re.fullmatch(r'9\d*[02468]', num_str):
-                digit_count = get_digit_counts(num_str)
-                words_representation = []
+        if pattern.fullmatch(num_str):  # Проверяем соответствие числа регулярному выражению
+            digit_count = get_digit_counts(num_str)
+            words_representation = []
 
-                for digit in num_str:
-                    count = digit_count[digit]
-                    if count > 1:
-                        words_representation.append(number_to_words(digit))
-                    else:
-                        words_representation.append(digit)
+            for digit in num_str:
+                if digit == '-':  # Сохраняем знак числа
+                    words_representation.append('-')
+                elif digit_count[digit] > 1:
+                    words_representation.append(number_to_words(digit))
+                else:
+                    words_representation.append(digit)
 
-                results.append(f"{num_str}: {''.join(words_representation)}")
+            results.append(f"{num_str}: {''.join(words_representation)}")
 
     return results
 
