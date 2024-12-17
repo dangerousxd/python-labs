@@ -22,29 +22,26 @@ def number_to_words(digit):
     return words_dict.get(digit, '')
 
 def get_digit_counts(number):
-    """Функция подсчитывает количество каждой цифры в числе."""
     digit_count = {}
     for digit in str(number):
-        if digit.isdigit():  # Игнорируем знак "-"
+        if digit.isdigit():
             digit_count[digit] = digit_count.get(digit, 0) + 1
     return digit_count
 
 def process_numbers(input_data):
-    """Обрабатывает строку с числами и возвращает результаты."""
     results = []
 
-    # Регулярное выражение для целых чисел, начинающихся с 9 (с учетом отрицательных чисел).
     pattern = re.compile(r'-?9\d*[02468]')
 
     numbers = input_data.split()
 
     for num_str in numbers:
-        if pattern.fullmatch(num_str):  # Проверяем соответствие числа регулярному выражению
+        if pattern.fullmatch(num_str):
             digit_count = get_digit_counts(num_str)
             words_representation = []
 
             for digit in num_str:
-                if digit == '-':  # Сохраняем знак числа
+                if digit == '-':
                     words_representation.append('-')
                 elif digit_count[digit] > 1:
                     words_representation.append(number_to_words(digit))
