@@ -10,7 +10,7 @@
 Вывести все возможные варианты"""
 
 from itertools import combinations
-import time
+import timeit
 
 
 def manual_partition(group):
@@ -79,28 +79,25 @@ def pythonic_partition_with_constraints(group, max_first_team_sum):
 
 def main():
     group = list(range(1, 21))
-    max_first_team_sum = 30  # Установите порог для суммы первой бригады
+    max_first_team_sum = 30
 
     print("=== Часть 1: Алгоритмическое решение ===")
-    start_time = time.time()
+    manual_time = timeit.timeit(lambda: manual_partition(group), number=1)
     manual_results = manual_partition(group)
-    end_time = time.time()
     print(f"Найдено {len(manual_results)} вариантов.")
-    print(f"Время выполнения: {end_time - start_time:.2f} секунд.\n")
+    print(f"Время выполнения: {manual_time:.2f} секунд.\n")
 
     print("=== Часть 1: Решение с использованием Python ===")
-    start_time = time.time()
+    pythonic_time = timeit.timeit(lambda: pythonic_partition(group), number=1)
     pythonic_results = pythonic_partition(group)
-    end_time = time.time()
     print(f"Найдено {len(pythonic_results)} вариантов.")
-    print(f"Время выполнения: {end_time - start_time:.2f} секунд.\n")
+    print(f"Время выполнения: {pythonic_time:.2f} секунд.\n")
 
     print("=== Часть 2: Усложнённое решение с ограничениями ===")
-    start_time = time.time()
+    constrained_time = timeit.timeit(lambda: pythonic_partition_with_constraints(group, max_first_team_sum), number=1)
     constrained_results, optimal_result = pythonic_partition_with_constraints(group, max_first_team_sum)
-    end_time = time.time()
     print(f"Найдено {len(constrained_results)} вариантов с ограничением.")
-    print(f"Время выполнения: {end_time - start_time:.2f} секунд.\n")
+    print(f"Время выполнения: {constrained_time:.2f} секунд.\n")
 
     if optimal_result is None:
         print("Не удалось найти разбиение, удовлетворяющее ограничениям.")
